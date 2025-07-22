@@ -7,7 +7,7 @@ router.get('/', PostsController.getAll);
 router.get('/search', PostsController.search);
 router.get('/:id', PostsController.getById);
 router.post('/', upload.single('imagem'), PostsController.create);
-router.put('/:id', PostsController.update);
+router.put('/:id',upload.single('imagem'), PostsController.update);
 router.delete('/:id', PostsController.remove);
 
 module.exports = router;
