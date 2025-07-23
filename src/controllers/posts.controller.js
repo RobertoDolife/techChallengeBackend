@@ -47,8 +47,8 @@ exports.update = async (req, res) => {
     const { titulo, conteudo } = req.body;
     const post = await Post.findByPk(req.params.id);
     if (!post) return res.status(404).json({ erro: 'Post não encontrado' });
-    await post.update({ titulo, conteudo });
-    res.status(200).json(post);
+    const updatedPost= await post.update({ titulo, conteudo });
+    res.status(200).json(updatedPost);
   } catch (err) {
     res.status(500).json({ erro: 'Erro ao atualizar post' });
   }
