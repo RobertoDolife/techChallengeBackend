@@ -2,6 +2,9 @@ const db = require('../models');
 const Post = db.Post;
 const Usuario = db.Usuario;
 const { Op } = require('sequelize');
+const fs = require('fs');
+const path = require('path');
+
 
 exports.getAll = async (req, res) => {
   try {
@@ -45,14 +48,29 @@ exports.create = async (req, res) => {
 exports.update = async (req, res) => {
   try {
     const { titulo, conteudo } = req.body;
+
     const post = await Post.findByPk(req.params.id);
     if (!post) return res.status(404).json({ erro: 'Post não encontrado' });
-    const updatedPost= await post.update({ titulo, conteudo });
+
+    if (req.file && post.imagem) {
+      const oldImagePath = path.join(__dirname, '..', '..', 'public', 'uploads', 'posts', post.imagem);
+      fs.unlink(oldImagePath, (err) => {
+        if (err) console.error('Erro ao deletar imagem antiga:', err);
+      });
+    }
+
+
+    const imagem = req.file ? req.file.filename : post.imagem;
+
+    const updatedPost = await post.update({ titulo, conteudo, imagem });
+
     res.status(200).json(updatedPost);
   } catch (err) {
+    console.error(err);
     res.status(500).json({ erro: 'Erro ao atualizar post' });
   }
 };
+
 
 exports.remove = async (req, res) => {
   try {
