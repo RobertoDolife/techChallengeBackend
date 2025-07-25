@@ -1,8 +1,23 @@
-FROM node:18
+FROM alpine:latest AS builder
+
 WORKDIR /app
-COPY package*.json ./
-RUN mkdir -p public/uploads/posts
-RUN npm install
+
+RUN apk --no-cache update && apk add nodejs npm
+
+COPY package*.json .
+
+RUN npm ci
+
 COPY . .
-EXPOSE 3000
-CMD [ "npm", "start" ]
+
+RUN npm prune --production
+
+FROM alpine:latest AS production
+
+WORKDIR /app
+
+RUN apk --no-cache update && apk add nodejs
+
+COPY --from=builder /app .
+
+CMD ["node", "--env-file-if-exists", ".env",  "server.js"]

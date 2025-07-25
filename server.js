@@ -1,7 +1,6 @@
-require('dotenv').config();
 const app = require('./src/app');
 const db = require('./src/models');
-const PORT = process.env.PORT || 3000;
+const {env} = require('./src/common/env')
 
 db.sequelize.authenticate()
   .then(() => {
@@ -10,7 +9,7 @@ db.sequelize.authenticate()
   })
   .then(() => {
     console.log('🛠️ Modelos sincronizados com o banco');
-    app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
+    app.listen(env.PORT, () => console.log(`Servidor rodando na porta ${env.PORT}`));
   })
   .catch(err => {
     console.error('Erro ao conectar com o banco:', err);
