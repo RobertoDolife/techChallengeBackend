@@ -1,0 +1,59 @@
+name: CI/CD - Tech Challenge
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-test:
+    name: 🧪 Build e Testes
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_DATABASE: SchoolOnDb
+          MYSQL_USER: root
+          MYSQL_PASSWORD: senha123
+          MYSQL_ROOT_PASSWORD: senha123
+        options: --health-cmd="mysqladmin ping --silent" --health-interval=10s --health-timeout=5s --health-retries=5
+
+    env:
+      NODE_ENV: test
+      DATABASE_USERNAME: root
+      DATABASE_PASSWORD: senha123
+      DATABASE_HOST: 127.0.0.1
+      DATABASE_PORT: 3306
+      PORT: 3000
+
+    steps:
+      - name: 📥 Clonar repositório
+        uses: actions/checkout@v3
+
+      - name: 🟢 Configurar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: 📦 Instalar dependências
+        run: npm install
+
+      - name: 🛠️ Rodar Migrations
+        run: npx sequelize-cli db:migrate --env test
+
+      - name: 🧪 Executar Testes e Cobertura
+        run: npm test -- --coverage
+
+      - name: 🚨 Validar Cobertura mínima
+        run: |
+          COVERAGE=$(npx jest --coverage | grep 'All files' | awk '{print $5}' | tr -d '%')
+          echo "Cobertura atual: $COVERAGE%"
+          if (( $(echo "$COVERAGE < 20" | bc -l) )); then
+            echo "❌ Cobertura abaixo de 20%! Falha na pipeline."
+            exit 1
+          fi
