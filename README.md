@@ -79,8 +79,6 @@ Certifique-se de que seu banco MySQL esteja rodando e que o .env esteja configur
 
 ✅ Variáveis de Ambiente .env
 env
-Copiar
-Editar
 DATABASE_USERNAME=user
 DATABASE_PASSWORD=password
 DATABASE_HOST=127.0.0.1
