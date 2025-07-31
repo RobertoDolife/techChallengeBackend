@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
+    "dev": "node --watch --env-file-if-exists .env server.js",
     "start": "node --env-file-if-exists .env server.js",
     "db:migrate": "dotenv -e .env -- sequelize db:migrate --config ./src/database/config.js --migrations-path ./src/database/migrations",
     "migration:create": "sequelize migration:create --migrations-path ./src/database/migrations --name $1"
