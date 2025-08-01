@@ -13,13 +13,13 @@ jobs:
 
     services:
       mysql:
-        image: mysql:8
+        image: bitnami/mysql:8.4
         ports:
           - 3306:3306
         env:
           MYSQL_DATABASE: SchoolOnDb
-          MYSQL_USER: root
-          MYSQL_PASSWORD: senha123
+          #MYSQL_USER: root
+          #MYSQL_PASSWORD: senha123
           MYSQL_ROOT_PASSWORD: senha123
         options: --health-cmd="mysqladmin ping --silent" --health-interval=10s --health-timeout=5s --health-retries=5
 
@@ -44,7 +44,7 @@ jobs:
         run: npm install
 
       - name: 🛠️ Rodar Migrations
-        run: npx sequelize-cli db:migrate --env test
+        run: npx sequelize-cli db:migrate --env test --config ./src/database/config.js --migrations-path ./src/database/migrations
 
       - name: 🧪 Executar Testes e Cobertura
         run: npm test -- --coverage
