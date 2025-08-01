@@ -44,7 +44,7 @@ jobs:
         run: npm install
 
       - name: 🛠️ Rodar Migrations
-        run: npx sequelize-cli db:migrate --env test
+        run: npx sequelize-cli db:migrate --env test --config ./src/database/config.js --migrations-path ./src/database/migrations
 
       - name: 🧪 Executar Testes e Cobertura
         run: npm test -- --coverage
