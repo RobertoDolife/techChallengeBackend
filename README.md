@@ -38,22 +38,23 @@ A aplicação foi refatorada para Node.js visando maior escalabilidade e flexibi
 ---
 
 ## 📁 Estrutura de Pastas
-
+```
 ├── src/
-│ ├── app.js # Configuração do Express
-│ ├── server.js # Inicialização do servidor
-│ ├── routes/ # Rotas da API
-│ ├── controllers/ # Lógica dos endpoints
-│ ├── models/ # Sequelize models
-│ ├── config/ # Multer e sequelize config
-│ ├── common/env.js # Validação de variáveis .env
-├── migrations/ # Migrations com Sequelize CLI
-├── tests/ # Testes com Jest e Supertest
+│   ├── app.js                # Configuração do Express
+│   ├── server.js             # Inicialização do servidor
+│   ├── routes/               # Rotas da API
+│   ├── controllers/          # Lógica dos endpoints
+│   ├── models/               # Sequelize models
+│   ├── config/               # Configurações do Multer e Sequelize
+│   ├── common/
+│   │   └── env.js            # Validação de variáveis .env
+├── migrations/               # Migrations com Sequelize CLI
+├── tests/                    # Testes com Jest e Supertest
 ├── docker-compose.yml
 ├── Dockerfile
 ├── .env
 ├── README.md
-
+```
 ---
 
 ## 🚀 Como Executar o Projeto
