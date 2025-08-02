@@ -5,6 +5,11 @@
   "scripts": {
     "dev": "node --watch --env-file-if-exists .env server.js",
     "start": "node --env-file-if-exists .env server.js",
+    "test": "dotenv -e .env -- jest --passWithNoTests",
+    "test:ci": "dotenv -e .env -- jest --ci --passWithNoTests",
+    "test:coverage": "dotenv -e .env -- jest --coverage --passWithNoTests",
+    "test:watch": "dotenv -e .env -- jest --watch --passWithNoTests",
+    "test:watchAll": "dotenv -e .env -- jest --watchAll --passWithNoTests",
     "db:migrate": "dotenv -e .env -- sequelize db:migrate --config ./src/database/config.js --migrations-path ./src/database/migrations",
     "migration:create": "sequelize migration:create --migrations-path ./src/database/migrations --name $1"
   },
@@ -17,7 +22,12 @@
     "zod": "^4.0.9"
   },
   "devDependencies": {
+    "@jest/globals": "^30.0.5",
+    "@swc/core": "^1.13.3",
+    "@swc/jest": "^0.2.39",
     "dotenv-cli": "^9.0.0",
-    "sequelize-cli": "^6.6.3"
+    "jest": "^30.0.5",
+    "sequelize-cli": "^6.6.3",
+    "supertest": "^7.1.4"
   }
 }
