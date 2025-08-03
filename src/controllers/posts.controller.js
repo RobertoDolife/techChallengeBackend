@@ -1,6 +1,5 @@
-const db = require('../models');
-const Post = db.Post;
-const Usuario = db.Usuario;
+const { Post } = require('../entities/post')
+const { User } = require('../entities/user');
 const { Op } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
@@ -9,11 +8,12 @@ const path = require('path');
 exports.getAll = async (req, res) => {
   try {
     const posts = await Post.findAll({
-      order: [['data_criacao', 'DESC']],
-      include: { model: Usuario, attributes: ['id', 'nome', 'email'] }
+      order: [['created_at', 'DESC']],
+      include: { model: User, attributes: ['id', 'name', 'email'] }
     });
     res.status(200).json(posts);
   } catch (err) {
+    console.log(err)
     res.status(500).json({ erro: 'Erro ao listar posts' });
   }
 };
@@ -21,7 +21,7 @@ exports.getAll = async (req, res) => {
 exports.getById = async (req, res) => {
   try {
     const post = await Post.findByPk(req.params.id, {
-      include: { model: Usuario, attributes: ['id', 'nome', 'email'] }
+      include: { model: User, attributes: ['id', 'name', 'email'] }
     });
     if (!post) return res.status(404).json({ erro: 'Post não encontrado' });
 
@@ -33,36 +33,37 @@ exports.getById = async (req, res) => {
 
 exports.create = async (req, res) => {
   try {
-    const { titulo, conteudo, usuario_id } = req.body;
-    if (!titulo || !usuario_id) {
+    const { title, content, user_id } = req.body;
+    if (!title || !user_id) {
       return res.status(400).json({ erro: 'Campos obrigatórios não preenchidos' });
     }
-    const imagem = req.file ? req.file.filename : null;
-    const novoPost = await Post.create({ titulo, conteudo, usuario_id, imagem });
+    const image = req.file ? req.file.filename : null;
+    const novoPost = await Post.create({ title, content, userId: user_id, image });
     res.status(201).json(novoPost);
-  } catch (error) {
+  } catch (err) {
+    console.log(err)
     res.status(500).json({ erro: 'Erro ao criar o post.' });
   }
 };
 
 exports.update = async (req, res) => {
   try {
-    const { titulo, conteudo } = req.body;
+    const { title, content } = req.body;
 
     const post = await Post.findByPk(req.params.id);
     if (!post) return res.status(404).json({ erro: 'Post não encontrado' });
 
-    if (req.file && post.imagem) {
-      const oldImagePath = path.join(__dirname, '..', '..', 'public', 'uploads', 'posts', post.imagem);
+    if (req.file && post.image) {
+      const oldImagePath = path.join(__dirname, '..', '..', 'public', 'uploads', 'posts', post.image);
       fs.unlink(oldImagePath, (err) => {
         if (err) console.error('Erro ao deletar imagem antiga:', err);
       });
     }
 
 
-    const imagem = req.file ? req.file.filename : post.imagem;
+    const image = req.file ? req.file.filename : post.image;
 
-    const updatedPost = await post.update({ titulo, conteudo, imagem });
+    const updatedPost = await post.update({ title, content, image });
 
     res.status(200).json(updatedPost);
   } catch (err) {
@@ -85,16 +86,16 @@ exports.remove = async (req, res) => {
 
 exports.search = async (req, res) => {
   try {
-    const termo = req.query.q;
-    if (!termo) return res.status(400).json({ erro: 'Termo de busca ausente' });
+    const term = req.query.q;
+    if (!term) return res.status(400).json({ erro: 'Termo de busca ausente' });
     const posts = await Post.findAll({
       where: {
         [Op.or]: [
-          { titulo: { [Op.like]: `%${termo}%` } },
-          { conteudo: { [Op.like]: `%${termo}%` } }
+          { title: { [Op.like]: `%${term}%` } },
+          { content: { [Op.like]: `%${term}%` } }
         ]
       },
-      include: { model: Usuario, attributes: ['id', 'nome'] }
+      include: { model: User, attributes: ['id', 'name'] }
     });
     res.status(200).json(posts);
   } catch (err) {
