@@ -10,51 +10,32 @@ module.exports = {
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
 
-    await queryInterface.createTable('post', {
+    await queryInterface.createTable('users', {
       id: {
         type: Sequelize.INTEGER,
-        allowNull: false,
         autoIncrement: true,
         primaryKey: true
       },
-      titulo: {
-        type: Sequelize.STRING(60),
-        allowNull: false
+      name: Sequelize.STRING(150),
+      email: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true
       },
-      conteudo: {
-        type: Sequelize.STRING(1000),
-        allowNull: true
-      },
-      data_criacao: {
+      password: Sequelize.STRING,
+      createdAt: {
         type: Sequelize.DATE,
         allowNull: false,
+        field: 'created_at',
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
-      imagem: {
-        type: Sequelize.STRING(255),
-        allowNull: true
-      },
-      data_atualizacao: {
+      updatedAt: {
         type: Sequelize.DATE,
         allowNull: false,
+        field: 'updated_at',
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
         onUpdate: Sequelize.literal('CURRENT_TIMESTAMP')
-      },
-      usuario_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        primaryKey: true,
-        references: {
-          model: 'usuario',
-          key: 'id'
-        },
-        onUpdate: 'NO ACTION',
-        onDelete: 'NO ACTION'
       }
-    })
-
-    await queryInterface.addIndex('post', ['usuario_id'], {
-      name: 'fk_post_usuario_idx'
     })
   },
 
@@ -65,7 +46,6 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
-
-    await queryInterface.dropTable('post')
+    await queryInterface.dropTable('users')
   }
 }
