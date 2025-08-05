@@ -1,4 +1,4 @@
-# 🧠 Tech Challenge - Plataforma de Blogging Dinâmico
+# Tech Challenge - Plataforma de Blogging Dinâmico
 
 Projeto desenvolvido como parte do Tech Challenge da FIAP, integrando conhecimentos adquiridos durante a fase 2.
 
@@ -57,7 +57,7 @@ A aplicação foi refatorada para Node.js visando maior escalabilidade e flexibi
 ```
 ---
 
-## 🚀 Como Executar o Projeto
+## Como Executar o Projeto
 
 ### Requisitos
 - Docker e Docker Compose instalados
@@ -83,15 +83,17 @@ npm start
 
 Certifique-se de que seu banco MySQL esteja rodando e que o .env esteja configurado corretamente.
 
-✅ Variáveis de Ambiente .env
+Variáveis de Ambiente .env :
+```
 env
 DATABASE_USERNAME=user
 DATABASE_PASSWORD=password
 DATABASE_HOST=127.0.0.1
 DATABASE_PORT=3306
 PORT=3000
+```
 
-### Testes Automatizados
+## Testes Automatizados
 Executar testes + cobertura
 bash
 ```
@@ -106,7 +108,7 @@ O projeto garante no mínimo 20% de cobertura de código em testes, incluindo as
 
 - Exclusão de post
 
-### CI/CD com GitHub Actions
+## CI/CD com GitHub Actions
 O repositório possui um workflow automatizado que executa:
 
 - Instalação de dependências
@@ -119,7 +121,7 @@ O repositório possui um workflow automatizado que executa:
 
 Arquivo: .github/workflows/ci-cd.yml
 
-### Endpoints da API
+## Endpoints da API
 Método	Rota	Descrição
 ```
 GET	/posts	Lista todos os posts
@@ -129,3 +131,5 @@ PUT	/posts/:id	Atualiza título, conteúdo e imagem
 DELETE	/posts/:id	Exclui um post
 GET	/posts/search?q=palavra	Busca por título ou conteúdo
 ```
+## Desafios
+Utilização e aprendizado da ferramenta Docker, que foi o primeiro contato com a mesma pelos membros da equipe.
