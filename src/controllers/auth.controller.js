@@ -38,6 +38,7 @@ exports.login = async (req, res) => {
     // 4. Retornar resposta
     return res.json({
       id: usuario.id,
+      nome: usuario.nome,
       email: usuario.email,
       admin: usuario.admin,
       token
