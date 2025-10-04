@@ -7,6 +7,7 @@ module.exports = (sequelize) => {
     conteudo: { type: DataTypes.STRING(1000), allowNull: true },
     imagem: { type: DataTypes.STRING(255), allowNull: true },
     usuario_id: { type: DataTypes.INTEGER, allowNull: false },
+    materia: { type: DataTypes.STRING(100), allowNull: true },
   }, {
     tableName: 'post',
     timestamps: true,

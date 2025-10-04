@@ -5,7 +5,6 @@ const { Op } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
 
-
 exports.getAll = async (req, res) => {
   try {
     const posts = await Post.findAll({
@@ -33,12 +32,12 @@ exports.getById = async (req, res) => {
 
 exports.create = async (req, res) => {
   try {
-    const { titulo, conteudo, usuario_id } = req.body;
+    const { titulo, conteudo, usuario_id, materia } = req.body;
     if (!titulo || !usuario_id) {
       return res.status(400).json({ erro: 'Campos obrigatórios não preenchidos' });
     }
     const imagem = req.file ? req.file.filename : null;
-    const novoPost = await Post.create({ titulo, conteudo, usuario_id, imagem });
+    const novoPost = await Post.create({ titulo, conteudo, usuario_id, imagem, materia });
     res.status(201).json(novoPost);
   } catch (error) {
     res.status(500).json({ erro: 'Erro ao criar o post.' });
@@ -47,7 +46,7 @@ exports.create = async (req, res) => {
 
 exports.update = async (req, res) => {
   try {
-    const { titulo, conteudo } = req.body;
+    const { titulo, conteudo, materia } = req.body;
 
     const post = await Post.findByPk(req.params.id);
     if (!post) return res.status(404).json({ erro: 'Post não encontrado' });
@@ -59,10 +58,9 @@ exports.update = async (req, res) => {
       });
     }
 
-
     const imagem = req.file ? req.file.filename : post.imagem;
 
-    const updatedPost = await post.update({ titulo, conteudo, imagem });
+    const updatedPost = await post.update({ titulo, conteudo, imagem, materia });
 
     res.status(200).json(updatedPost);
   } catch (err) {
@@ -70,7 +68,6 @@ exports.update = async (req, res) => {
     res.status(500).json({ erro: 'Erro ao atualizar post' });
   }
 };
-
 
 exports.remove = async (req, res) => {
   try {
@@ -91,7 +88,8 @@ exports.search = async (req, res) => {
       where: {
         [Op.or]: [
           { titulo: { [Op.like]: `%${termo}%` } },
-          { conteudo: { [Op.like]: `%${termo}%` } }
+          { conteudo: { [Op.like]: `%${termo}%` } },
+          { materia: { [Op.like]: `%${termo}%` } }
         ]
       },
       include: { model: Usuario, attributes: ['id', 'nome'] }
