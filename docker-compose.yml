@@ -14,12 +14,18 @@ services:
     build: .
     ports:
       - "3000:3000"
-    volumes:
-      - .:/app
     depends_on:
       - db
     env_file:
       - .env
+    restart: unless-stopped
+
+  frontend:
+    build: ../frontend-techchallenge
+    ports:
+      - "8080:80"
+    depends_on:
+      - app
     restart: unless-stopped
 
 volumes:
