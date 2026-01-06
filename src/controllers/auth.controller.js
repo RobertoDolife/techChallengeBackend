@@ -11,7 +11,7 @@ exports.login = asyncHandler(async (req, res) => {
   // 1. Validar campos obrigatórios
   console.log('📧 Email recebido:', email);
   console.log('🔑 Senha recebida:', senha);
-  
+
   if (!email || !senha) {
     throw ApiError.badRequest("Email e senha são obrigatórios");
   }
@@ -19,19 +19,19 @@ exports.login = asyncHandler(async (req, res) => {
   // 2. Buscar usuário pelo email
   const usuario = await Usuario.findOne({ where: { email } });
   console.log('👤 Usuário encontrado?', !!usuario);
-  
+
   if (!usuario) {
     console.log('❌ Usuário não encontrado no banco');
     throw ApiError.unauthorized("Usuário ou senha inválidos");
   }
-  
+
   console.log('🔐 Hash da senha no banco:', usuario.senha);
 
   // 3. Validar senha usando bcrypt
   console.log('🔍 Validando senha...');
   const senhaValida = await usuario.validarSenha(senha);
   console.log('✅ Senha válida?', senhaValida);
-  
+
   if (!senhaValida) {
     console.log('❌ Senha inválida');
     throw ApiError.unauthorized("Usuário ou senha inválidos");
@@ -61,11 +61,27 @@ exports.login = asyncHandler(async (req, res) => {
 exports.logout = asyncHandler(async (req, res) => {
   // Com JWT stateless, o logout é feito no cliente removendo o token
   // Aqui podemos registrar o logout ou adicionar o token a uma blacklist se necessário
-  
+
   console.log('🚪 Logout realizado para usuário:', req.usuario?.email);
-  
+
   return res.json({
     success: true,
     message: 'Logout realizado com sucesso'
   });
 });
+
+//GET /userInfo
+exports.getUserInfo = asyncHandler(async (req, res) => {
+  const userId = req.usuario.id;
+  const usuario = await Usuario.findOne({ where: { id: userId } });
+  return res.json({
+    success: true,
+    data: {
+      id: usuario.id,
+      nome: usuario.nome,
+      email: usuario.email,
+      admin: usuario.admin,
+    }
+  });
+
+})

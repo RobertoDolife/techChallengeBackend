@@ -13,4 +13,7 @@ router.post('/logout', verificarToken, AuthController.logout);
 // GET /auth/stats
 router.get('/stats', StatsController.getUserStats);
 
+//GET /auth/userInfo
+router.get('/userInfo', verificarToken, AuthController.getUserInfo);
+
 module.exports = router;
