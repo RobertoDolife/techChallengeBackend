@@ -1,6 +1,6 @@
 services:
   db:
-    image: bitnami/mysql:8.4
+    image: mysql:8.4
     environment:
       MYSQL_ROOT_PASSWORD: senha123
       MYSQL_DATABASE: SchoolOnDb
@@ -18,15 +18,18 @@ services:
       - db
     env_file:
       - .env
+    volumes:
+      - ./src:/app/src
+      - ./server.js:/app/server.js
     restart: unless-stopped
 
-  frontend:
-    build: ../frontend-techchallenge
-    ports:
-      - "8080:80"
-    depends_on:
-      - app
-    restart: unless-stopped
+  # frontend:
+  #   build: ../frontend-techchallenge
+  #   ports:
+  #     - "8080:80"
+  #   depends_on:
+  #     - app
+  #   restart: unless-stopped
 
 volumes:
   db_data:
