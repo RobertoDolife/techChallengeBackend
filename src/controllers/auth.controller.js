@@ -18,7 +18,7 @@ exports.login = asyncHandler(async (req, res) => {
 
   // 2. Buscar usuário pelo email
   const usuario = await Usuario.findOne({ where: { email } });
-  console.log('👤 Usuário encontrado?', !!usuario);
+  console.log('👤 Usuário encontrado?', !!usuario, usuario);
 
   if (!usuario) {
     console.log('❌ Usuário não encontrado no banco');
